@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stress Detection</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css">
+    <style>
+        /* Additional styling for animations */
+        .fade-in {
+            animation: fadeIn 1s ease-in;
+        }
+
+        .fade-out {
+            animation: fadeOut 1s ease-out forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+
+        #loading {
+            display: none;
+        }
+
+        #result {
+            display: none; /* Initially hidden */
+        }
+
+        .interactive-btn {
+            transition: transform 0.3s;
+        }
+
+        .interactive-btn:hover {
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body>
+    <!-- Homepage -->
+    <div id="homepage" class="container mt-5 fade-in">
+        <h2 class="text-center">Welcome to the Stress Detection System</h2>
+        <p class="text-center">An interactive platform for analyzing multimodal data for stress detection.</p>
+        <div class="text-center mt-4">
+            <button class="btn btn-primary interactive-btn" onclick="goToForm()">Start Prediction</button>
+        </div>
+    </div>
+
+    <!-- Prediction Page -->
+    <div id="predictionPage" class="container mt-5 fade-out" style="display: none;">
+        <h2 class="text-center">Multimodal Stress Detection</h2>
+        <form id="uploadForm" enctype="multipart/form-data">
+            <div class="mb-3">
+                <label>Transcript (CSV):</label>
+                <input type="file" name="transcript" class="form-control" accept=".csv" required>
+            </div>
+            <div class="mb-3">
+                <label>Audio File (WAV/MP3):</label>
+                <input type="file" name="audio" class="form-control" accept=".wav, .mp3" required>
+            </div>
+            <div class="mb-3">
+                <label>Select Model(s):</label><br>
+                <input type="checkbox" name="models" value="depressed"> Depression Model<br>
+                <input type="checkbox" name="models" value="ptsd"> PTSD Model
+            </div>
+            <button type="submit" class="btn btn-primary interactive-btn">Predict</button>
+        </form>
+
+        <!-- Loading animation container -->
+        <div id="loading" class="mt-4 text-center">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <p>Processing your request, please wait...</p>
+        </div>
+
+        <div id="result" class="mt-4"></div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#uploadForm').on('submit', function(event) {
+                event.preventDefault();
+
+                // Show loading animation, hide result, and start fade-in
+                $('#loading').show();
+                $('#result').hide().empty();
+
+                var formData = new FormData(this);
+
+                $.ajax({
+                    url: '/predict',
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(response) {
+                        // Hide loading animation, show results with fade-in effect
+                        $('#loading').hide();
+                        $('#result').fadeIn().empty();
+                        Object.keys(response).forEach(function(key) {
+                            $('#result').append(`<h5>${key}: ${response[key].label} (Probability: ${response[key].probability.toFixed(2)})</h5>`);
+                        });
+                    },
+                    error: function(error) {
+                        // Hide loading animation and display error
+                        $('#loading').hide();
+                        $('#result').fadeIn().html(`<p class="text-danger">Error: ${error.responseJSON.error}</p>`);
+                    }
+                });
+            });
+        });
+        // Function to navigate from the homepage to the prediction page
+	function goToForm() {
+	    $('#homepage').fadeOut(500, function() {  // Set fadeOut duration to 500ms
+		$('#predictionPage').removeClass('fade-out').addClass('fade-in').show();  // Ensure fade-in effect
+	    });
+}
+
+    </script>
+</body>
+</html>
+
