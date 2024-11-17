@@ -1,0 +1,10 @@
+flask
+numpy
+tensorflow
+pandas
+torch
+transformers
+librosa
+nltk
+werkzeug
+
