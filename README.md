@@ -49,8 +49,8 @@ python -m nltk.downloader punkt stopwords wordnet
 
 ### Step 1: Clone the Repository
 ```bash
-git clone <repository-url>
-cd <repository-directory>
+git clone https://github.com/jaimoryani/BDA-API
+cd BDA-API
 ```
 
 ### Step 2: Install Required Packages
@@ -67,7 +67,7 @@ pip install -r requirements.txt
 
 1. Start the Flask server:
    ```bash
-   python app.py
+   python3 app.py
    ```
 
 2. Open your web browser and navigate to:
