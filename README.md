@@ -168,7 +168,3 @@ This project is licensed under the MIT License. See the LICENSE file for details
 - Librosa for audio processing utilities.
 
 ```
-
-### Notes:
-- Replace `<repository-url>` with your GitHub repository link.
-- Include a `requirements.txt` file listing all the dependencies. Would you like help generating this file?
