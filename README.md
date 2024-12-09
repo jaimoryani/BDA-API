@@ -1,7 +1,4 @@
-### README.md for Your Project
-
-```markdown
-# Multimodal Depression and PTSD Detection System
+### Multimodal Depression and PTSD Detection System
 
 This project is a Flask-based web application that predicts Depression and PTSD levels from multimodal inputs, including audio files and transcript files. The system utilizes pre-trained deep learning models for analysis and supports feature extraction from both modalities.
 
